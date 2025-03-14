@@ -39,16 +39,18 @@ function solveAnimations() {
     animationContainers.forEach((container, index) => {
         // Find the start button within this container
         const startButton = container.querySelector('button.start-button:not([disabled])');
-        const speedControl = container.querySelector('.speed-control input[type="checkbox"]');
+        const speedControls = container.querySelectorAll('.speed-control .zb-checkbox input[type="checkbox"]');
 
         if (startButton) {
             console.log(`Processing animation ${index + 1}`);
 
             // Click speed checkbox if it exists and isn't checked
-            if (speedControl && !speedControl.checked) {
-                speedControl.click();
-                console.log('Enabled speed control');
-            }
+            speedControls.forEach(control => {
+                if (!control.checked) {
+                    control.click();
+                    console.log('Enabled checkbox control');
+                }
+            });
 
             // Add a small delay before clicking start
             setTimeout(() => {
@@ -66,12 +68,13 @@ function solveAnimations() {
         if (remainingButtons.length > 0) {
             console.log(`Found ${remainingButtons.length} remaining animations, processing...`);
             remainingButtons.forEach(button => {
-                const container = button.closest('.animation-player');
-                const speedControl = container?.querySelector('.speed-control input[type="checkbox"]');
-
-                if (speedControl && !speedControl.checked) {
-                    speedControl.click();
-                }
+                const speedControls = document.querySelectorAll('input[type="checkbox"]');
+                speedControls.forEach(control => {
+                    if (!control.checked) {
+                        control.click();
+                        console.log('Enabled checkbox control');
+                    }
+                });
                 button.click();
             });
         }
@@ -79,9 +82,23 @@ function solveAnimations() {
 
     // Keep checking and clicking play buttons until all animations are complete
     const checkInterval = setInterval(() => {
+        let count = 0;
+
+        const speedControls = document.querySelectorAll('input[type="checkbox"]');
+        speedControls.forEach(control => {
+            if (!control.checked) {
+                control.click();
+                console.log('Enabled checkbox control');
+            }
+        });
+
         const playButtons = document.querySelectorAll('button.normalize-controls[aria-label="Play"]');
         const pauseButtons = document.querySelectorAll('button.normalize-controls[aria-label="Pause"]');
         let allComplete = true;
+
+        if (count < 10) {
+            allComplete = false;
+        }
 
         playButtons.forEach(button => {
             const playButtonDiv = button.querySelector('.play-button');
@@ -102,6 +119,7 @@ function solveAnimations() {
             clearInterval(checkInterval);
         }
 
+        count++;
 
     }, 500);
 }

@@ -76,6 +76,34 @@ function solveAnimations() {
             });
         }
     }, 1000);
+
+    // Keep checking and clicking play buttons until all animations are complete
+    const checkInterval = setInterval(() => {
+        const playButtons = document.querySelectorAll('button.normalize-controls[aria-label="Play"]');
+        const pauseButtons = document.querySelectorAll('button.normalize-controls[aria-label="Pause"]');
+        let allComplete = true;
+
+        playButtons.forEach(button => {
+            const playButtonDiv = button.querySelector('.play-button');
+            if (!playButtonDiv.classList.contains('rotate-180')) {
+                allComplete = false;
+                // Click the play button if animation isn't complete
+                button.click();
+                console.log('Clicking play button to continue animation...');
+            }
+        });
+
+        if (pauseButtons.length > 0) {
+            allComplete = false;
+        }
+
+        if (allComplete) {
+            console.log('All animations completed');
+            clearInterval(checkInterval);
+        }
+
+
+    }, 500);
 }
 
 function solveMultipleChoice() {

@@ -124,9 +124,21 @@ function solveAnimations() {
     }, 500);
 }
 
-function solveMultipleChoice() {
+function solveMultipleChoice() { //TODO: Implement this
     // Find all MC questions and select correct answers
     const mcQuestions = document.querySelectorAll('.multiple-choice-question');
     // Add logic to handle MC questions
     console.log("Solving multiple choice...");
+}
+
+function solveChallenge() { //TODO: Implement this
+    /*
+    Maybe use chatGPT to solve the challenge questions
+    Take screenshot of the challenge question and send it to chatGPT?
+    Later: Only allow premium users to access this
+        */
+    // Find all challenge questions and select correct answers
+    const challengeQuestions = document.querySelectorAll('.challenge-question');
+    // Add logic to handle challenge questions
+    console.log("Solving challenge...");
 }

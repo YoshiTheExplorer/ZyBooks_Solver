@@ -1,0 +1,17 @@
+{
+    "name": "ZyBook Solver",
+    "description": "Automatically Solves ZyBook Questions",
+    "version": "1.0",
+    "manifest_version": 3,
+    "action": {
+        "default_popup": "popup/main.html",
+        "default_icon": "images/icon.png"
+    },
+    "permissions": [
+        "activeTab",
+        "scripting"
+    ],
+    "host_permissions": [
+        "https://zybooks.com/*"
+    ]
+}

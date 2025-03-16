@@ -136,7 +136,8 @@ function solveChallenge() { //TODO: Implement this
     Maybe use chatGPT to solve the challenge questions
     Take screenshot of the challenge question and send it to chatGPT?
     Later: Only allow premium users to access this
-        */
+    */
+
     // Find all challenge questions and select correct answers
     const challengeQuestions = document.querySelectorAll('.challenge-question');
     // Add logic to handle challenge questions

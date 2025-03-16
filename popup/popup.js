@@ -3,41 +3,48 @@ document.addEventListener('DOMContentLoaded', function () {
     let solveAnimations = document.getElementById('solveAnimations');
     let solveMC = document.getElementById('solveMC');
 
-    async function executeScript(functionName) {
-        try {
-            const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    // Helper function to send messages with retry
+    async function sendMessage(message) {
+        chrome.tabs.query({ active: true, currentWindow: true }, async function (tabs) {
+            const tab = tabs[0];
             if (!tab) {
                 console.error('No active tab found');
                 return;
             }
 
-            await chrome.scripting.executeScript({
-                target: { tabId: tab.id },
-                files: ['scripts/background.js']
-            });
+            let retries = 0;
+            const maxRetries = 3;
 
-            // Execute the specific function
-            await chrome.scripting.executeScript({
-                target: { tabId: tab.id },
-                func: (fn) => {
-                    window[fn]();
-                },
-                args: [functionName]
-            });
-        } catch (error) {
-            console.error('Execution failed:', error);
-        }
+            const tryConnect = async () => {
+                try {
+                    await chrome.tabs.sendMessage(tab.id, { ping: true });
+                    // If successful, send the actual message
+                    chrome.tabs.sendMessage(tab.id, { message });
+                } catch (error) {
+                    if (retries < maxRetries) {
+                        retries++;
+                        console.log(`Retry attempt ${retries}...`);
+                        // Wait 500ms before retrying
+                        setTimeout(tryConnect, 500);
+                    } else {
+                        console.error('Failed to connect after multiple attempts');
+                    }
+                }
+            };
+
+            await tryConnect();
+        });
     }
 
     if (solveAll) {
-        solveAll.addEventListener('click', () => executeScript('solveAllQuestions'));
+        solveAll.addEventListener('click', () => sendMessage("solveAll"));
     }
 
     if (solveAnimations) {
-        solveAnimations.addEventListener('click', () => executeScript('solveAnimations'));
+        solveAnimations.addEventListener('click', () => sendMessage("solveAnimations"));
     }
 
     if (solveMC) {
-        solveMC.addEventListener('click', () => executeScript('solveMultipleChoice'));
+        solveMC.addEventListener('click', () => sendMessage("solveMC"));
     }
 });

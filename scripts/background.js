@@ -4,7 +4,7 @@ chrome.runtime.onMessage.addListener(
         // Handle ping message
         if (request.ping) {
             sendResponse({ pong: true });
-            return true;
+            return;
         }
 
         switch (request.message) {
@@ -17,9 +17,13 @@ chrome.runtime.onMessage.addListener(
             case "solveMC":
                 solveMultipleChoice();
                 break;
+            case "solveSA":
+                solveShortAnswers();
+                break;
         }
-        // Return true to indicate you want to send a response asynchronously
-        return true;
+
+        sendResponse({ message: "finished" });
+        return;
     }
 );
 
@@ -27,36 +31,37 @@ function solveAllQuestions() {
     console.log("Starting to solve all questions...");
     solveAnimations();
     solveMultipleChoice();
+    solveShortAnswers();
 }
 
 function solveAnimations() {
     console.log("Starting animation solver...");
 
     // Find all animation containers
-    const animationContainers = document.querySelectorAll('.animation-player');
-    console.log(`Found ${animationContainers.length} animation containers`);
+    const animationContainers = document.querySelectorAll('.animation-controls');
+    console.log(`Found ${animationContainers?.length} animation containers`);
 
-    animationContainers.forEach((container, index) => {
+    animationContainers?.forEach((container, index) => {
         // Find the start button within this container
         const startButton = container.querySelector('button.start-button:not([disabled])');
-        const speedControls = container.querySelectorAll('.speed-control .zb-checkbox input[type="checkbox"]');
+        const speedControl = container.querySelectorAll('.speed-control .zb-checkbox input[type="checkbox"]')[0];
 
         if (startButton) {
             console.log(`Processing animation ${index + 1}`);
 
             // Click speed checkbox if it exists and isn't checked
-            speedControls.forEach(control => {
-                if (!control.checked) {
-                    control.click();
-                    console.log('Enabled checkbox control');
-                }
-            });
+            if (speedControl && !speedControl.checked) {
+                speedControl.click();
+                console.log('Successfully sped up this animation');
+            } else {
+                console.log(speedControl ? 'Already sped up' : 'or already clicked');
+            }
 
-            // Add a small delay before clicking start
-            setTimeout(() => {
-                startButton.click();
-                console.log('Clicked start button');
-            }, 100);
+            // Add a small delay before clicking start -- doesnt seem necessary
+            // setTimeout(() => {
+            startButton.click();
+            console.log('Successfully started button');
+            // }, 100);
         } else {
             console.log(`No active start button found for animation ${index + 1}`);
         }
@@ -65,16 +70,16 @@ function solveAnimations() {
     // Backup check for any animations we might have missed
     setTimeout(() => {
         const remainingButtons = document.querySelectorAll('button.start-button:not([disabled])');
-        if (remainingButtons.length > 0) {
+        if (remainingButtons?.length > 0) {
             console.log(`Found ${remainingButtons.length} remaining animations, processing...`);
             remainingButtons.forEach(button => {
-                const speedControls = document.querySelectorAll('input[type="checkbox"]');
-                speedControls.forEach(control => {
-                    if (!control.checked) {
-                        control.click();
-                        console.log('Enabled checkbox control');
-                    }
-                });
+                const speedControl = document.querySelectorAll('input[type="checkbox"]')[0];
+                if (speedControl && !speedControl.checked) {
+                    speedControl.click();
+                    console.log('Successfully sped up this animation');
+                } else {
+                    console.log(speedControl ? 'Already sped up' : 'or already clicked');
+                }
                 button.click();
             });
         }
@@ -82,15 +87,19 @@ function solveAnimations() {
 
     // Keep checking and clicking play buttons until all animations are complete
     const checkInterval = setInterval(() => {
+        // This resets to 0 each interval... it's within the local scope bro
         let count = 0;
 
-        const speedControls = document.querySelectorAll('input[type="checkbox"]');
-        speedControls.forEach(control => {
-            if (!control.checked) {
-                control.click();
-                console.log('Enabled checkbox control');
-            }
-        });
+        /**
+         * Speed control already checked, not necessary to try again every time we continue animation
+         */
+        // const speedControl = document.querySelectorAll('input[type="checkbox"]')[0];
+        // if (speedControl && !speedControl.checked) {
+        //     speedControl.click();
+        //     console.log('Successfully sped up this animation');
+        // } else {
+        //     console.log(speedControl ? 'Already sped up' : 'or already clicked');
+        // }
 
         const playButtons = document.querySelectorAll('button.normalize-controls[aria-label="Play"]');
         const pauseButtons = document.querySelectorAll('button.normalize-controls[aria-label="Pause"]');
@@ -124,11 +133,59 @@ function solveAnimations() {
     }, 500);
 }
 
-function solveMultipleChoice() { //TODO: Implement this
-    // Find all MC questions and select correct answers
-    const mcQuestions = document.querySelectorAll('.multiple-choice-question');
-    // Add logic to handle MC questions
+function solveMultipleChoice() {
     console.log("Solving multiple choice...");
+    // Find all MC questions and select correct answers
+    const MCQs = document.querySelectorAll('.multiple-choice-question');
+
+    MCQs.forEach((MCQ, index) => {
+        console.log(`Answering question ${index + 1}`);
+        const choices = MCQ.querySelectorAll("input[type='radio']");
+        let done;
+        let i = 0;
+        const checkChoices = setInterval(() => {
+            console.log(`Checking choice ${i+1}`);
+            done = MCQ.querySelector(".question + div + div > div[aria-label='Question completed']");
+            if (done || i >= choices.length) {
+                console.log(done ? 'Question completed' : 'All choices checked');
+                clearInterval(checkChoices);
+                return;
+            }
+            choices[i++].click();
+        }, 100);
+    });
+}
+
+function solveShortAnswers() { //TODO: Implement this
+    console.log("Solving short answers...");
+    // Find all MC questions and select correct answers
+    const SAQs = document.querySelectorAll('.short-answer-question');
+
+    SAQs.forEach((SAQ, index) => {
+        console.log(`Answering question ${index + 1}`);
+        const showAnswer = SAQ.querySelector(".show-answer-button");
+        const answerBox = SAQ.querySelector(".ember-text-area");
+        if (showAnswer) {
+            showAnswer.click();
+            showAnswer.click();
+        } else {
+            console.log(`FATAL: No show answer button for question ${index + 1}`);
+            answerBox.value = 'No "Show Answer"?';
+        }
+    });
+
+    // Wait for answers and fill
+    setTimeout(() => {
+        SAQs.forEach((SAQ, index) => {
+            const answerBox = SAQ.querySelector(".ember-text-area");
+            const checkButton = SAQ.querySelector(".check-button");
+            const answer = SAQ.querySelector(".forfeit-answer").textContent;
+            // console.log(`Question ${index + 1} answer: ${answer}`);
+            answerBox.value = answer;
+            answerBox.dispatchEvent(new Event('input', { bubbles: true }));
+            setTimeout(() => checkButton.click(), 50);
+        });
+    }, 50);
 }
 
 function solveChallenge() { //TODO: Implement this

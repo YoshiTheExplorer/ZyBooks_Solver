@@ -35,11 +35,11 @@ function solveAllQuestions() {
 }
 
 function solveAnimations() {
-    console.log("Starting animation solver...");
 
     // Find all animation containers
     const animationContainers = document.querySelectorAll('.animation-controls');
-    console.log(`Found ${animationContainers?.length} animation containers`);
+
+    if (animationContainers.length > 0) console.log(`Starting animation solver\nFound ${animationContainers.length} animation containers`);
 
     animationContainers?.forEach((container, index) => {
         // Find the start button within this container
@@ -134,9 +134,9 @@ function solveAnimations() {
 }
 
 function solveMultipleChoice() {
-    console.log("Solving multiple choice...");
     // Find all MC questions and select correct answers
     const MCQs = document.querySelectorAll('.multiple-choice-question');
+    if (MCQs.length > 0) console.log(`Solving multiple choice\nFound ${MCQs.length} MCQ containers`);
 
     MCQs.forEach((MCQ, index) => {
         console.log(`Answering question ${index + 1}`);
@@ -157,9 +157,9 @@ function solveMultipleChoice() {
 }
 
 function solveShortAnswers() { //TODO: Implement this
-    console.log("Solving short answers...");
     // Find all MC questions and select correct answers
     const SAQs = document.querySelectorAll('.short-answer-question');
+    if (MCQs.length > 0) console.log(`Solving short answers\nFound ${SAQs.length} SAQ containers`);
 
     SAQs.forEach((SAQ, index) => {
         console.log(`Answering question ${index + 1}`);

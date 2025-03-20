@@ -3,7 +3,6 @@ import { dragDrop } from './dragdrop.js';
 // Listen for messages from the popup
 chrome.runtime.onMessage.addListener(
     function (request, sender, sendResponse) {
-        dragDrop();
         // Handle ping message
         if (request.ping) {
             sendResponse({ pong: true });
@@ -35,6 +34,7 @@ function solveAllQuestions() {
     solveAnimations();
     solveMultipleChoice();
     solveShortAnswers();
+    solveMisc();
 }
 
 function solveAnimations() {
@@ -160,7 +160,7 @@ function solveMultipleChoice() {
 }
 
 function solveShortAnswers() { //TODO: Implement this
-    // Find all MC questions and select correct answers
+    // Find all SA questions
     const SAQs = document.querySelectorAll('.short-answer-question');
     if (MCQs.length > 0) console.log(`Solving short answers\nFound ${SAQs.length} SAQ containers`);
 
@@ -189,6 +189,10 @@ function solveShortAnswers() { //TODO: Implement this
             setTimeout(() => checkButton.click(), 50);
         });
     }, 50);
+}
+
+function solveMisc() {
+    const dragdrops = document.querySelectorAll('.participation.custom-content-resource, .participation.content-tool-content-resource');
 }
 
 function solveChallenge() { //TODO: Implement this

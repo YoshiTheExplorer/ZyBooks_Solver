@@ -13,5 +13,11 @@
     ],
     "host_permissions": [
         "https://zybooks.com/*"
+    ],
+    "content_scripts": [
+        {
+            "matches": ["<all_urls>"],
+            "js": ["dist/background.bundle.js"]
+        }
     ]
 }

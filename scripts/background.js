@@ -1,6 +1,9 @@
+import { dragDrop } from './dragdrop.js';
+
 // Listen for messages from the popup
 chrome.runtime.onMessage.addListener(
     function (request, sender, sendResponse) {
+        dragDrop();
         // Handle ping message
         if (request.ping) {
             sendResponse({ pong: true });

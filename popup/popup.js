@@ -12,11 +12,11 @@ document.addEventListener('DOMContentLoaded', function () {
             return;
         }
 
-        await chrome.scripting.executeScript({
-            target: { tabId: tab.id },
-            files: ["scripts/background.js"]
-        }, () => console.log('injected')
-        );
+        // await chrome.scripting.executeScript({
+        //     target: { tabId: tab.id },
+        //     files: ["scripts/background.js"]
+        // }, () => console.log('injected')
+        // );
 
         let retries = 0;
         const maxRetries = 3;

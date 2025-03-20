@@ -1,1 +1,6 @@
 .qodo
+node_modules
+dist
+.env
+# *.bundle.js
+# *.bundle.js.map

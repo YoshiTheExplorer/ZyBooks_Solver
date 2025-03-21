@@ -7,18 +7,18 @@ export async function dragDrop(sourceNode, destNode) {
     const dst_y = dst_rect.top + dst_rect.height / 2;
 
     const mockDataTransfer = {
-        dropEffect: 'move',  // Set the dropEffect property
-        effectAllowed: 'move',  // You can set other properties as well
-    
+        dropEffect: 'move', // Set the dropEffect property
+        effectAllowed: 'move', // You can set other properties as well
+
         // Mock the setData method
         setData: function(format, data) {
-            this[format] = data;  // Store the data as a property on the mock object
+            this[format] = data; // Store the data as a property on the mock object
         },
-    
+
         // Mock the getData method
         getData: function(format) {
-            return this[format];  // Return the stored data
-        }
+            return this[format]; // Return the stored data
+        },
     };
 
     sourceNode.draggable = 'true';
@@ -28,14 +28,14 @@ export async function dragDrop(sourceNode, destNode) {
         cancelable: true,
         clientX: src_x,
         clientY: src_y,
-        dataTransfer: mockDataTransfer
+        dataTransfer: mockDataTransfer,
     });
     sourceNode.dispatchEvent(dragStartEvent);
 
     const dragEnterEvent = new DragEvent('dragenter', {
         bubbles: true,
         cancelable: true,
-        dataTransfer: mockDataTransfer
+        dataTransfer: mockDataTransfer,
     });
     sourceNode.dispatchEvent(dragEnterEvent);
 
@@ -52,7 +52,7 @@ export async function dragDrop(sourceNode, destNode) {
         cancelable: true,
         clientX: dst_x,
         clientY: dst_y,
-        dataTransfer: mockDataTransfer
+        dataTransfer: mockDataTransfer,
     });
     sourceNode.dispatchEvent(dropEvent);
 

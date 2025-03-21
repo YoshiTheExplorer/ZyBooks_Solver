@@ -5,14 +5,15 @@ module.exports = (env, argv) => {
   const isProd = argv.mode === 'production';
   return {
     plugins: [
-      new Dotenv()
+      new Dotenv(),
     ],
-    entry: './scripts/background.js', // this is your starting point
+    // this is your starting point
+    entry: './scripts/background.js',
     output: {
       filename: 'background.bundle.js',
-      path: path.resolve(__dirname, 'dist')
+      path: path.resolve(__dirname, 'dist'),
     },
     mode: argv.mode || 'development',
     devtool: isProd ? false : 'source-map',
-  }
+  };
 };

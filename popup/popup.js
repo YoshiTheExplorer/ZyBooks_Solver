@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function() {
     const solveAll = document.getElementById('solveAll');
     const solveAnimations = document.getElementById('solveAnimations');
     const solveMC = document.getElementById('solveMC');
@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const resp = await chrome.tabs.sendMessage(tab.id, { message });
                 console.log("Resp:");
                 console.log(resp);
-            } catch (error) {
+            } catch {
                 if (retries < maxRetries) {
                     retries++;
                     console.log(`Retry attempt ${retries}...`);

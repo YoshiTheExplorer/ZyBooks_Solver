@@ -34,6 +34,7 @@ module.exports = [
 			'prefer-const': 'error',
 			// quotes: ['error', 'single'], // Better to use double quotes for HTML attributes
 			semi: ['error', 'always'],
+			'semi-spacing': ['error', { before: false, after: true }],
 			'space-before-blocks': 'error',
 			'space-before-function-paren': ['error', {
 				anonymous: 'never',

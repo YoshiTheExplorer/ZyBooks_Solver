@@ -1,8 +1,9 @@
 document.addEventListener('DOMContentLoaded', function () {
-    let solveAll = document.getElementById('solveAll');
-    let solveAnimations = document.getElementById('solveAnimations');
-    let solveMC = document.getElementById('solveMC');
-    let solveSA = document.getElementById('solveSA');
+    const solveAll = document.getElementById('solveAll');
+    const solveAnimations = document.getElementById('solveAnimations');
+    const solveMC = document.getElementById('solveMC');
+    const solveSA = document.getElementById('solveSA');
+    const solveDD = document.getElementById('solveDD');
 
     // Helper function to send messages with retry
     async function sendMessage(message) {
@@ -44,10 +45,8 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     solveAll?.addEventListener('click', () => sendMessage("solveAll"));
-
     solveAnimations?.addEventListener('click', () => sendMessage("solveAnimations"));
-
     solveMC?.addEventListener('click', () => sendMessage("solveMC"));
-
     solveSA?.addEventListener('click', () => sendMessage("solveSA"));
+    solveDD?.addEventListener('click', () => sendMessage("solveDD"));
 });

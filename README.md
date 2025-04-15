@@ -1,13 +1,13 @@
-# ZyBooks_Solver
+# ZyBooks_Solver (BETA)
  Automatically Solves Your ZyBooks
 
 ## How to use
 
 1. Clone the repository
-2. Open the extension in Chrome
-3. Click the "Complete All on Page" button
-4. Click the "Complete Animations" button
-5. Click the "Complete Multiple Choice" button
+2. Set up & open the extension in Chrome like any custom extension (chrome://extensions/)
+3. Start autocompleting zybooks!
+
+# Currently, only supports autocomplete for Animations, Multiple Choice, and Short Answer questions
 
 ## How it works
 
